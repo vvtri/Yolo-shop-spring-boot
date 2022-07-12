@@ -5,12 +5,13 @@ spring:
     url: jdbc:postgresql://localhost:5432/spring_yolo
   jpa:
     show-sql: true
+
     database-platform: org.hibernate.dialect.PostgreSQL94Dialect
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
       format-sql: true
   flyway:
     schemas: migrations

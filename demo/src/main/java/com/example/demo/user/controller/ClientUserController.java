@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.common.constant.GlobalConstant;
 import com.example.demo.common.constant.RoutePrefix;
 import com.example.demo.user.dto.SigninDto;
 import com.example.demo.user.dto.SignupDto;
@@ -23,7 +22,7 @@ import com.fasterxml.jackson.core.exc.StreamWriteException;
 import com.fasterxml.jackson.databind.DatabindException;
 
 @RestController
-@RequestMapping(RoutePrefix.Client + "/user")
+@RequestMapping(RoutePrefix.CLIENT + "/user")
 public class ClientUserController {
 
   @Autowired
