@@ -1,5 +1,6 @@
 package com.example.demo.user.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -17,11 +18,15 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import com.example.demo.common.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerator;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Data
@@ -29,7 +34,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "\"user\"")
-public class User extends BaseEntity {
+ // Error when jackson convert bidirectional relationship to json
+  // https://www.baeldung.com/jackson-bidirectional-relationships-and-infinite-recursion
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+
+public class User extends BaseEntity  {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
@@ -46,14 +55,15 @@ public class User extends BaseEntity {
   @Builder.Default
   private Boolean isVerified = false;
 
-  @OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST }, mappedBy = "user")
+  // Error when cascade with insertable false, updateable false
+  // https://stackoverflow.com/questions/58996129/do-cascadetype-all-and-insertable-false-updatable-false-exclude-each-othe
+  @OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
   private UserVerification userVerification;
 
-  @OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST }, mappedBy = "user")
+  @OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
   private UserResetPassword userResetPassword;
 
-  @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST })
+  @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST })
   @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
   private List<User> roles;
-
 }

@@ -3,5 +3,7 @@ spring:
     import:
       - 'application-dev.yml'
 server:
+  error:
+    include-stacktrace: never
   servlet:
     contextPath: /api

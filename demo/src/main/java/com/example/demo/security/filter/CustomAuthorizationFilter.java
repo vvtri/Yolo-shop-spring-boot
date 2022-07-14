@@ -34,10 +34,6 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
   @Override
   protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-    log.info("go should filter");
-    log.info("whitelist: {}", Arrays.toString(SecurityConfig.WHITE_LIST_PATH));
-    log.info("path: {}", request.getServletPath());
-
     AntPathMatcher antPathMatcher = new AntPathMatcher();
     for (String path : SecurityConfig.WHITE_LIST_PATH) {
       if (antPathMatcher.match(path, request.getServletPath()))
@@ -51,7 +47,6 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
     log.info("go filter authen");
-    log.info("security: {}", securityUtility);
 
     Long id = null;
 
@@ -64,6 +59,8 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
     List<SimpleGrantedAuthority> authorities = new ArrayList<>();
     authorities.add(new SimpleGrantedAuthority("role"));
+
+    log.info("id: {}", id);
 
     SecurityContextHolder.getContext().setAuthentication(
         new UsernamePasswordAuthenticationToken(id, null, null));

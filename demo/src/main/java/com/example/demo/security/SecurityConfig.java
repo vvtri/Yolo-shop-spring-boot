@@ -32,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   public static final String[] WHITE_LIST_PATH = {
       "/client/user/signup",
       "/client/user/signin",
-      "/client/user/verify"
+      "/client/user/verify/**"
   };
 
   @Override
